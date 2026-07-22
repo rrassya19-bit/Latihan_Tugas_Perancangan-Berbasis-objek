@@ -2,12 +2,12 @@
 
 ## Tabel Refleksi — 4 Pendekatan dalam Pengembangan
 
-| Pendekatan | Kekuatan | Risiko/Batasan | Contoh penggunaan |
-|---|---|---|---|
-| **Class-based OOP** | Blueprint jelas; kode terorganisir per entitas; reusability via inheritance; encapsulation jaga konsistensi data | Overhead abstraksi; bisa over-engineering untuk hal sederhana | Java, C++, Python, JavaScript (class syntax) |
-| **Prototype-based (JS)** | Fleksibel; object bisa langsung dibuat tanpa class; mudah extend | Kurang terstruktur untuk skala besar; rawan bug karena tidak ada tipe | JavaScript murni (sebelum ES6 class) |
-| **Functional programming** | Pure function → mudah di-test; immutability → minim side effect; komposisi fungsi | Sulit untuk stateful logic; learning curve (monad, functor) | React (hooks), Redux, Ramda |
-| **AI-assisted development** | Cepat prototyping; generate boilerplate; bantu debugging & refactoring | Kode belum tentu optimal/aman; developer bisa kehilangan pemahaman fundamental | GitHub Copilot, ChatGPT, TabNine |
+| Pendekatan                  | Kekuatan                                                                                                         | Risiko/Batasan                                                                 | Contoh penggunaan                            |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------- |
+| **Class-based OOP**         | Blueprint jelas; kode terorganisir per entitas; reusability via inheritance; encapsulation jaga konsistensi data | Overhead abstraksi; bisa over-engineering untuk hal sederhana                  | Java, C++, Python, JavaScript (class syntax) |
+| **Prototype-based (JS)**    | Fleksibel; object bisa langsung dibuat tanpa class; mudah extend                                                 | Kurang terstruktur untuk skala besar; rawan bug karena tidak ada tipe          | JavaScript murni (sebelum ES6 class)         |
+| **Functional programming**  | Pure function → mudah di-test; immutability → minim side effect; komposisi fungsi                                | Sulit untuk stateful logic; learning curve (monad, functor)                    | React (hooks), Redux, Ramda                  |
+| **AI-assisted development** | Cepat prototyping; generate boilerplate; bantu debugging & refactoring                                           | Kode belum tentu optimal/aman; developer bisa kehilangan pemahaman fundamental | GitHub Copilot, ChatGPT, TabNine             |
 
 ---
 
@@ -26,7 +26,7 @@ Sebaliknya, untuk data sederhana tanpa perilaku (misal: konfigurasi, response AP
 - **Class** = cetakan kue. Satu cetakan bisa menghasilkan banyak kue dengan bentuk yang sama.
 - **Object** = kue hasil cetakan. Setiap kue bisa punya topping berbeda (data berbeda), tapi bentuk dasarnya sama.
 - **Atribut** = properti kue (warna, rasa, topping).
-- **Method** =行为能力 kue (dipotong, dimakan, dihias).
+- **Method** = kue (dipotong, dimakan, dihias).
 
 ---
 
@@ -34,15 +34,15 @@ Sebaliknya, untuk data sederhana tanpa perilaku (misal: konfigurasi, response AP
 
 ### Tabel Perbandingan — Sebelum (`index.js`) vs Sesudah (`modify.js`)
 
-| Aspek | Sebelum (index.js) | Sesudah (modify.js) |
-|-------|-------------------|-------------------|
-| **Constructor params** | `(isbn, judul, penulis, jumlahEksemplar)` — 4 parameter | `(isbn, judul, penulis, **kategori**, jumlahEksemplar)` — 5 parameter |
-| **Atribut kategori** | Tidak ada | `this.kategori = kategori` |
-| **Method `isReferensi()`** | Tidak ada | Ada — mengecek `this.kategori === "Referensi"` |
-| **Method `info()`** | Cetak tanpa kategori | Cetak dengan `(kategori)` |
-| **Jumlah object** | 2 variabel terpisah (`buku1`, `buku2`) | 2 variabel + **3 object dalam array** |
-| **Looping cetak** | Manual satu per satu | `forEach()` otomatis — semua buku tercetak |
-| **`eksemplarTersedia`** | Public — bisa diakses/diubah langsung dari luar | Sama (public), tapi dijelaskan **kenapa sebaiknya dijaga lewat method** |
+| Aspek                      | Sebelum (index.js)                                      | Sesudah (modify.js)                                                     |
+| -------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Constructor params**     | `(isbn, judul, penulis, jumlahEksemplar)` — 4 parameter | `(isbn, judul, penulis, **kategori**, jumlahEksemplar)` — 5 parameter   |
+| **Atribut kategori**       | Tidak ada                                               | `this.kategori = kategori`                                              |
+| **Method `isReferensi()`** | Tidak ada                                               | Ada — mengecek `this.kategori === "Referensi"`                          |
+| **Method `info()`**        | Cetak tanpa kategori                                    | Cetak dengan `(kategori)`                                               |
+| **Jumlah object**          | 2 variabel terpisah (`buku1`, `buku2`)                  | 2 variabel + **3 object dalam array**                                   |
+| **Looping cetak**          | Manual satu per satu                                    | `forEach()` otomatis — semua buku tercetak                              |
+| **`eksemplarTersedia`**    | Public — bisa diakses/diubah langsung dari luar         | Sama (public), tapi dijelaskan **kenapa sebaiknya dijaga lewat method** |
 
 ---
 
@@ -55,6 +55,7 @@ Bagian ini menjelaskan **setiap perubahan** dari `index.js` ke `modify.js` baris
 #### A. Constructor — Penambahan Parameter `kategori`
 
 **Sebelum — `index.js`:**
+
 ```js
 constructor(isbn, judul, penulis, jumlahEksemplar) {
     this.isbn = isbn;
@@ -66,6 +67,7 @@ constructor(isbn, judul, penulis, jumlahEksemplar) {
 ```
 
 **Sesudah — `modify.js`:**
+
 ```js
 constructor(isbn, judul, penulis, kategori, jumlahEksemplar) {
     this.isbn = isbn;
@@ -85,14 +87,14 @@ Perubahan hanya 1 baris: parameter `kategori` ditambahkan di urutan ke-4 (sebelu
 
 **Apa yang terjadi saat `new Buku("978-3", "Pemrograman Java", "John Doe", "Referensi", 3)` dipanggil?**
 
-| Langkah | Kode yang dijalankan | Hasil |
-|---------|---------------------|-------|
-| 1 | `this.isbn = "978-3"` | isbn tersimpan |
-| 2 | `this.judul = "Pemrograman Java"` | judul tersimpan |
-| 3 | `this.penulis = "John Doe"` | penulis tersimpan |
-| 4 | **`this.kategori = "Referensi"`** | **kategori tersimpan — BARU** |
-| 5 | `this.jumlahEksemplar = 3` | jumlah tersimpan |
-| 6 | `this.eksemplarTersedia = 3` | stok awal = jumlah |
+| Langkah | Kode yang dijalankan              | Hasil                         |
+| ------- | --------------------------------- | ----------------------------- |
+| 1       | `this.isbn = "978-3"`             | isbn tersimpan                |
+| 2       | `this.judul = "Pemrograman Java"` | judul tersimpan               |
+| 3       | `this.penulis = "John Doe"`       | penulis tersimpan             |
+| 4       | **`this.kategori = "Referensi"`** | **kategori tersimpan — BARU** |
+| 5       | `this.jumlahEksemplar = 3`        | jumlah tersimpan              |
+| 6       | `this.eksemplarTersedia = 3`      | stok awal = jumlah            |
 
 **Kenapa kategori penting?** Kategori memungkinkan kita membedakan jenis buku (Referensi, Fiksi, Akademik). Di masa depan, aturan seperti "buku Referensi tidak bisa dipinjam" atau "denda Referensi 2x lipat" bisa diimplementasikan dengan mudah karena data kategori sudah tersedia.
 
@@ -101,11 +103,13 @@ Perubahan hanya 1 baris: parameter `kategori` ditambahkan di urutan ke-4 (sebelu
 #### B. Method Baru — `isReferensi()`
 
 **Sebelum — `index.js`:**
+
 ```js
 // (Tidak ada method isReferensi)
 ```
 
 **Sesudah — `modify.js`:**
+
 ```js
 isReferensi() {
     return this.kategori === "Referensi";
@@ -126,11 +130,11 @@ Bayangkan buku di dunia nyata. Kamu bisa bertanya "Apakah buku ini buku referens
 
 **Alur untuk 3 object buku:**
 
-| Object | `this.kategori` | `this.kategori === "Referensi"` | Return |
-|--------|----------------|-------------------------------|--------|
-| Pemrograman Java | `"Referensi"` | `true` | `true` |
-| Algoritma Dasar | `"Akademik"` | `false` | `false` |
-| Cerita Rakyat | `"Fiksi"` | `false` | `false` |
+| Object           | `this.kategori` | `this.kategori === "Referensi"` | Return  |
+| ---------------- | --------------- | ------------------------------- | ------- |
+| Pemrograman Java | `"Referensi"`   | `true`                          | `true`  |
+| Algoritma Dasar  | `"Akademik"`    | `false`                         | `false` |
+| Cerita Rakyat    | `"Fiksi"`       | `false`                         | `false` |
 
 **Kenapa dibuat method, bukan langsung akses `buku.kategori === "Referensi"` dari luar?**
 
@@ -145,6 +149,7 @@ Bayangkan buku di dunia nyata. Kamu bisa bertanya "Apakah buku ini buku referens
 #### C. Method `info()` — Informasi Kategori Ditambahkan
 
 **Sebelum — `index.js`:**
+
 ```js
 info() {
     return `${this.judul} oleh ${this.penulis} — tersedia ${this.eksemplarTersedia}/${this.jumlahEksemplar}`;
@@ -152,6 +157,7 @@ info() {
 ```
 
 **Sesudah — `modify.js`:**
+
 ```js
 info() {
     return `${this.judul} oleh ${this.penulis} (${this.kategori}) — tersedia ${this.eksemplarTersedia}/${this.jumlahEksemplar}`;
@@ -161,6 +167,7 @@ info() {
 **Perubahan:** String template ditambah `(${this.kategori})` setelah nama penulis.
 
 **Contoh perbedaan output:**
+
 - Sebelum: `Pemrograman Java oleh John Doe — tersedia 3/3`
 - Sesudah: `Pemrograman Java oleh John Doe (Referensi) — tersedia 3/3`
 
@@ -171,6 +178,7 @@ Dengan menampilkan kategori, informasi buku jadi lebih lengkap. Pengguna bisa la
 #### D. Tiga Object Buku dalam Array + Looping `forEach()`
 
 **Sebelum — `index.js`:**
+
 ```js
 const buku1 = new Buku("978-1", "Clean Code", "Robert C. Martin", 2);
 const buku2 = new Buku("978-2", "Design Patterns", "GoF", 1);
@@ -181,15 +189,18 @@ console.log(buku2.info());
 ```
 
 **Sesudah — `modify.js`:**
+
 ```js
 const daftarBuku = [
-    new Buku("978-3", "Pemrograman Java", "John Doe", "Referensi", 3),
-    new Buku("978-4", "Algoritma Dasar", "Jane Doe", "Akademik", 5),
-    new Buku("978-5", "Cerita Rakyat", "Si Kancil", "Fiksi", 4),
+  new Buku("978-3", "Pemrograman Java", "John Doe", "Referensi", 3),
+  new Buku("978-4", "Algoritma Dasar", "Jane Doe", "Akademik", 5),
+  new Buku("978-5", "Cerita Rakyat", "Si Kancil", "Fiksi", 4),
 ];
 
 daftarBuku.forEach((buku, index) => {
-    console.log(`[${index + 1}] ${buku.info()} | Referensi: ${buku.isReferensi()}`);
+  console.log(
+    `[${index + 1}] ${buku.info()} | Referensi: ${buku.isReferensi()}`,
+  );
 });
 ```
 
@@ -197,13 +208,13 @@ daftarBuku.forEach((buku, index) => {
 
 **Apa itu array?** Array adalah struktur data yang bisa menyimpan **banyak object** dalam satu variabel. Bayangkan array sebagai **rak buku** — kamu bisa meletakkan banyak buku dalam satu rak, bukan buku-buku berserakan di lantai (variabel terpisah).
 
-| Tanpa Array | Dengan Array |
-|---|---|
-| `const buku1 = ...` | `const daftarBuku = [` |
-| `const buku2 = ...` | `  new Buku(...),` |
-| `const buku3 = ...` | `  new Buku(...),` |
-| (tambah variabel baru setiap tambah buku) | `  new Buku(...)` |
-| | `]` |
+| Tanpa Array                               | Dengan Array           |
+| ----------------------------------------- | ---------------------- |
+| `const buku1 = ...`                       | `const daftarBuku = [` |
+| `const buku2 = ...`                       | `  new Buku(...),`     |
+| `const buku3 = ...`                       | `  new Buku(...),`     |
+| (tambah variabel baru setiap tambah buku) | `  new Buku(...)`      |
+|                                           | `]`                    |
 
 **Apa itu `forEach()`?** `forEach()` adalah method bawaan array untuk **memproses setiap anggota** array satu per satu secara otomatis. Kita tidak perlu menulis loop manual.
 
@@ -214,21 +225,24 @@ daftarBuku.forEach((buku, index) => { ... })
 ```
 
 Parameter `forEach` menerima sebuah **fungsi callback** yang akan dijalankan untuk setiap element array. Callback ini menerima 2 parameter:
+
 - `buku` → berisi satu object Buku dari array (berganti setiap iterasi)
 - `index` → nomor urut (mulai dari 0)
 
 **Alur eksekusi lengkap:**
 
-| Iterasi | `buku` (object) | `index` | Output `console.log()` |
-|---------|----------------|---------|----------------------|
-| 1 | Buku{isbn:"978-3", judul:"Pemrograman Java", ...} | 0 | `[1] Pemrograman Java oleh John Doe (Referensi) — tersedia 3/3 \| Referensi: true` |
-| 2 | Buku{isbn:"978-4", judul:"Algoritma Dasar", ...} | 1 | `[2] Algoritma Dasar oleh Jane Doe (Akademik) — tersedia 5/5 \| Referensi: false` |
-| 3 | Buku{isbn:"978-5", judul:"Cerita Rakyat", ...} | 2 | `[3] Cerita Rakyat oleh Si Kancil (Fiksi) — tersedia 4/4 \| Referensi: false` |
+| Iterasi | `buku` (object)                                   | `index` | Output `console.log()`                                                             |
+| ------- | ------------------------------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| 1       | Buku{isbn:"978-3", judul:"Pemrograman Java", ...} | 0       | `[1] Pemrograman Java oleh John Doe (Referensi) — tersedia 3/3 \| Referensi: true` |
+| 2       | Buku{isbn:"978-4", judul:"Algoritma Dasar", ...}  | 1       | `[2] Algoritma Dasar oleh Jane Doe (Akademik) — tersedia 5/5 \| Referensi: false`  |
+| 3       | Buku{isbn:"978-5", judul:"Cerita Rakyat", ...}    | 2       | `[3] Cerita Rakyat oleh Si Kancil (Fiksi) — tersedia 4/4 \| Referensi: false`      |
 
 **Detail string template untuk iterasi ke-1:**
+
 ```
 `[${index + 1}] ${buku.info()} | Referensi: ${buku.isReferensi()}`
 ```
+
 - `${index + 1}` → `0 + 1` = `1`
 - `${buku.info()}` → panggil method `info()` → `"Pemrograman Java oleh John Doe (Referensi) — tersedia 3/3"`
 - `${buku.isReferensi()}` → panggil method `isReferensi()` → `true`
@@ -259,11 +273,11 @@ Kedua kode di atas **valid secara JavaScript** — tidak ada error. Tapi secara 
 
 **Perbandingan: Akses Langsung vs Lewat Method**
 
-| Skenario | Akses Langsung ke Atribut | Lewat Method (`pinjam()` / `kembalikan()`) |
-|----------|--------------------------|-------------------------------------------|
-| Stok jadi negatif | ✅ Bisa ditulis `= -5` — **data tidak konsisten** | ❌ Dicegah — method `pinjam()` punya `if (this.eksemplarTersedia <= 0) throw new Error(...)` |
-| Stok melebihi jumlah | ✅ Bisa ditulis `+= 100` — **tidak realistis** | ❌ Dicegah — method `kembalikan()` cek `if (this.eksemplarTersedia < this.jumlahEksemplar)` |
-| Perubahan aturan di masa depan | ❌ Harus ubah semua tempat yang mengakses langsung | ✅ Cukup ubah di dalam method, pemanggil tidak perlu tahu |
+| Skenario                       | Akses Langsung ke Atribut                          | Lewat Method (`pinjam()` / `kembalikan()`)                                                   |
+| ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Stok jadi negatif              | ✅ Bisa ditulis `= -5` — **data tidak konsisten**  | ❌ Dicegah — method `pinjam()` punya `if (this.eksemplarTersedia <= 0) throw new Error(...)` |
+| Stok melebihi jumlah           | ✅ Bisa ditulis `+= 100` — **tidak realistis**     | ❌ Dicegah — method `kembalikan()` cek `if (this.eksemplarTersedia < this.jumlahEksemplar)`  |
+| Perubahan aturan di masa depan | ❌ Harus ubah semua tempat yang mengakses langsung | ✅ Cukup ubah di dalam method, pemanggil tidak perlu tahu                                    |
 
 **Apa yang terjadi di dalam `pinjam()`?**
 
@@ -279,12 +293,12 @@ pinjam() {
 
 **Alur eksekusi `pinjam()`:**
 
-| Langkah | Kode | Penjelasan |
-|---------|------|-----------|
-| 1 | `if (this.eksemplarTersedia <= 0)` | Cek: apakah stok sudah habis? |
-| 2 | Jika habis → `throw new Error(...)` | Hentikan proses, beri tahu pemanggil bahwa stok kosong |
-| 3 | Jika masih ada → `this.eksemplarTersedia -= 1` | Kurangi stok sebanyak 1 |
-| 4 | `return true` | Beri tahu pemanggil bahwa peminjaman berhasil |
+| Langkah | Kode                                           | Penjelasan                                             |
+| ------- | ---------------------------------------------- | ------------------------------------------------------ |
+| 1       | `if (this.eksemplarTersedia <= 0)`             | Cek: apakah stok sudah habis?                          |
+| 2       | Jika habis → `throw new Error(...)`            | Hentikan proses, beri tahu pemanggil bahwa stok kosong |
+| 3       | Jika masih ada → `this.eksemplarTersedia -= 1` | Kurangi stok sebanyak 1                                |
+| 4       | `return true`                                  | Beri tahu pemanggil bahwa peminjaman berhasil          |
 
 **Apa yang terjadi di dalam `kembalikan()`?**
 
@@ -296,11 +310,11 @@ kembalikan() {
 }
 ```
 
-| Langkah | Kode | Penjelasan |
-|---------|------|-----------|
-| 1 | `if (this.eksemplarTersedia < this.jumlahEksemplar)` | Cek: apakah stok saat ini masih kurang dari jumlah maksimal? |
-| 2 | Jika iya → `this.eksemplarTersedia += 1` | Tambah stok 1 (aman, tidak akan melebihi jumlahEksemplar) |
-| 3 | Jika tidak → (tidak melakukan apa-apa) | Stok sudah penuh, tidak perlu ditambah |
+| Langkah | Kode                                                 | Penjelasan                                                   |
+| ------- | ---------------------------------------------------- | ------------------------------------------------------------ |
+| 1       | `if (this.eksemplarTersedia < this.jumlahEksemplar)` | Cek: apakah stok saat ini masih kurang dari jumlah maksimal? |
+| 2       | Jika iya → `this.eksemplarTersedia += 1`             | Tambah stok 1 (aman, tidak akan melebihi jumlahEksemplar)    |
+| 3       | Jika tidak → (tidak melakukan apa-apa)               | Stok sudah penuh, tidak perlu ditambah                       |
 
 **Kesimpulan:** Method `pinjam()` dan `kembalikan()` bertindak sebagai **pintu resmi** untuk mengubah `eksemplarTersedia`. Mereka memastikan data tetap konsisten — tidak negatif, tidak melebihi batas. Di masa depan, jika atribut diubah menjadi private (`#eksemplarTersedia`), akses langsung dari luar akan **dicegah oleh JavaScript** (error), dan semua perubahan hanya bisa lewat method.
 
@@ -309,6 +323,7 @@ kembalikan() {
 ### Output Terminal — Sebelum vs Sesudah
 
 **Output `index.js` (sebelum — tanpa kategori):**
+
 ```
 --- Data awal ---
 Clean Code oleh Robert C. Martin — tersedia 2/2
@@ -323,6 +338,7 @@ Gagal meminjam: Buku "Design Patterns" sedang tidak tersedia.
 Hanya 2 buku, tidak ada informasi kategori, dicetak manual.
 
 **Output `modify.js` (sesudah — dengan kategori + array + forEach):**
+
 ```
 --- Data awal ---
 Clean Code oleh Robert C. Martin (Teknik) — tersedia 2/2
@@ -342,6 +358,7 @@ Gagal meminjam: Buku "Design Patterns" sedang tidak tersedia.
 ```
 
 **3 perbedaan utama:**
+
 1. Setiap info buku sekarang menampilkan **kategori** dalam kurung — `(Teknik)`, `(Referensi)`, dll.
 2. Ada **3 buku baru** dalam array yang dicetak otomatis dengan `forEach()` — tanpa perlu menulis `console.log()` satu per satu.
 3. Setiap baris menampilkan **status referensi** — `Referensi: true` atau `Referensi: false`.
@@ -350,12 +367,12 @@ Gagal meminjam: Buku "Design Patterns" sedang tidak tersedia.
 
 ### Perbandingan: Tanpa Array vs Dengan Array
 
-| Aspek | Tanpa Array (`index.js`) | Dengan Array (`modify.js`) |
-|-------|------------------------|---------------------------|
-| **Deklarasi** | Variabel terpisah: `buku1`, `buku2` | Satu array: `daftarBuku = [...]` |
-| **Cetak** | Manual: `console.log(buku1.info())` | Otomatis: `daftarBuku.forEach(...)` |
+| Aspek                | Tanpa Array (`index.js`)               | Dengan Array (`modify.js`)                    |
+| -------------------- | -------------------------------------- | --------------------------------------------- |
+| **Deklarasi**        | Variabel terpisah: `buku1`, `buku2`    | Satu array: `daftarBuku = [...]`              |
+| **Cetak**            | Manual: `console.log(buku1.info())`    | Otomatis: `daftarBuku.forEach(...)`           |
 | **Tambah buku baru** | Buat variabel baru + tambah kode cetak | Tinggal tambah `new Buku(...)` ke dalam array |
-| **Skalabilitas** | Ribet kalau 100 buku | Tetap mudah — tinggal tambah isi array |
+| **Skalabilitas**     | Ribet kalau 100 buku                   | Tetap mudah — tinggal tambah isi array        |
 
 ---
 
@@ -364,6 +381,7 @@ Gagal meminjam: Buku "Design Patterns" sedang tidak tersedia.
 **Saran dari AI:** Ubah `isReferensi()` dari **method biasa** menjadi **getter** agar lebih natural.
 
 **Kode sebelum (method biasa):**
+
 ```js
 isReferensi() {
     return this.kategori === "Referensi";
@@ -372,6 +390,7 @@ isReferensi() {
 ```
 
 **Kode sesudah (getter):**
+
 ```js
 get isReferensi() {
     return this.kategori === "Referensi";
@@ -383,31 +402,31 @@ get isReferensi() {
 
 **Evaluasi:**
 
-| Aspek | Penilaian |
-|-------|-----------|
-| **Fungsional** | ✅ Hasil tetap sama — mengembalikan `true`/`false` |
-| **Semantik (makna)** | ✅ Getter lebih natural karena `isReferensi` adalah **status** (apakah buku ini referensi?), bukan **aksi** (tidak ada yang "dilakukan") |
-| **Side effect** | ✅ Tidak ada — method hanya membaca data (`this.kategori`), tidak mengubah apapun |
-| **Perubahan kode pemanggil** | ⚠️ Semua pemanggil harus dihapus tanda kurungnya: `buku.isReferensi()` → `buku.isReferensi` |
-| **Kemudahan maintenance** | ✅ Jika implementasi berubah (misal: cek dari database), pemanggil tetap sama — `buku.isReferensi` |
-| **Kesimpulan** | ✅ **Layak diterima** — getter membuat kode lebih ekspresif, sesuai prinsip JavaScript modern |
+| Aspek                        | Penilaian                                                                                                                                |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fungsional**               | ✅ Hasil tetap sama — mengembalikan `true`/`false`                                                                                       |
+| **Semantik (makna)**         | ✅ Getter lebih natural karena `isReferensi` adalah **status** (apakah buku ini referensi?), bukan **aksi** (tidak ada yang "dilakukan") |
+| **Side effect**              | ✅ Tidak ada — method hanya membaca data (`this.kategori`), tidak mengubah apapun                                                        |
+| **Perubahan kode pemanggil** | ⚠️ Semua pemanggil harus dihapus tanda kurungnya: `buku.isReferensi()` → `buku.isReferensi`                                              |
+| **Kemudahan maintenance**    | ✅ Jika implementasi berubah (misal: cek dari database), pemanggil tetap sama — `buku.isReferensi`                                       |
+| **Kesimpulan**               | ✅ **Layak diterima** — getter membuat kode lebih ekspresif, sesuai prinsip JavaScript modern                                            |
 
 ---
 
 ## Tindakan yang Tidak Boleh Langsung Diberikan ke AI Tanpa Review Manusia
 
-| Tindakan | Risiko |
-|----------|--------|
-| Generate kode produksi tanpa review keamanan | Rentan SQL injection, XSS, hardcoded credentials |
-| Mengubah konfigurasi infrastruktur (Docker, cloud, database) | Bisa expose port, hapus resource, biaya membengkak |
-| Menulis aturan bisnis yang kompleks | AI tidak paham konteks bisnis sepenuhnya — bisa salah logika |
-| Mengelola data pengguna (password, PII) | Melanggar privasi & compliance (GDPR, UU PDP) |
-| Debugging tanpa verifikasi | AI bisa salah diagnosa dan menyarankan solusi yang keliru |
-| Generate license atau legal notice | Tidak valid secara hukum |
-| Menghapus atau memodifikasi file tanpa backup | Data hilang permanen |
-| Menulis kode yang mengakses sistem internal (file system, environment variable) | Potensi kebocoran informasi sensitif |
-| Memberi akses AI ke production API tanpa rate limit | Bisa menyebabkan denial of service atau biaya API tak terkendali |
-| Menggenerate kode yang melibatkan hak cipta tanpa cek lisensi | Risiko tuntutan hukum (copyleft violation) |
+| Tindakan                                                                        | Risiko                                                           |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Generate kode produksi tanpa review keamanan                                    | Rentan SQL injection, XSS, hardcoded credentials                 |
+| Mengubah konfigurasi infrastruktur (Docker, cloud, database)                    | Bisa expose port, hapus resource, biaya membengkak               |
+| Menulis aturan bisnis yang kompleks                                             | AI tidak paham konteks bisnis sepenuhnya — bisa salah logika     |
+| Mengelola data pengguna (password, PII)                                         | Melanggar privasi & compliance (GDPR, UU PDP)                    |
+| Debugging tanpa verifikasi                                                      | AI bisa salah diagnosa dan menyarankan solusi yang keliru        |
+| Generate license atau legal notice                                              | Tidak valid secara hukum                                         |
+| Menghapus atau memodifikasi file tanpa backup                                   | Data hilang permanen                                             |
+| Menulis kode yang mengakses sistem internal (file system, environment variable) | Potensi kebocoran informasi sensitif                             |
+| Memberi akses AI ke production API tanpa rate limit                             | Bisa menyebabkan denial of service atau biaya API tak terkendali |
+| Menggenerate kode yang melibatkan hak cipta tanpa cek lisensi                   | Risiko tuntutan hukum (copyleft violation)                       |
 
 **Prinsip umum:** AI adalah asisten, bukan decision maker. Semua kode yang memengaruhi keamanan, data pengguna, infrastruktur, dan aturan bisnis harus ditinjau manusia sebelum dijalankan.
 
