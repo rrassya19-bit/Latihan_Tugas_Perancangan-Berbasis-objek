@@ -1,0 +1,49 @@
+classDiagram
+    direction LR
+
+    class Buku {
+        +string isbn
+        +string judul
+        +string kategori
+        +int jumlahEksemplar
+        +int eksemplarTersedia
+    }
+
+    class Anggota {
+        +int id
+        +string nama
+        +string email
+    }
+
+    class Pustakawan {
+        +int id
+        +string nip
+        +string nama
+    }
+
+    class Peminjaman {
+        +int id
+        +date tanggalPinjam
+        +string status
+    }
+
+    class Perpustakaan {
+        -list buku
+        -list anggota
+        -list peminjaman
+        -list pustakawan
+        +tambahBuku(buku)
+        +tambahAnggota(anggota)
+        +tambahPustakawan(pustakawan)
+        +daftarPustakawan()
+        +pinjamkan(isbn, idAnggota, idPustakawan, tanggal)
+        +daftarPeminjamanAktif()
+    }
+
+    Perpustakaan "1" o-- "1..*" Buku : mengagregasi
+    Perpustakaan "1" o-- "1..*" Anggota : mengagregasi
+    Perpustakaan "1" o-- "1..*" Peminjaman : mengagregasi
+    Perpustakaan "1" --> "1..*" Pustakawan : mengelola
+    Peminjaman "1" --> "1" Buku : asosiasi
+    Peminjaman "1" --> "1" Anggota : asosiasi
+    Peminjaman "1" --> "1" Pustakawan : diproses oleh
