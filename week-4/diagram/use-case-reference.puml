@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Pustakawan" as Pustakawan
+actor "Anggota" as Anggota
+
+rectangle SIPUSTAKA {
+    usecase "Kembalikan Buku" as UC_Kembali
+    usecase "Perpanjang Peminjaman" as UC_Perpanjang
+    usecase "Daftar Anggota" as UC_Daftar
+    usecase "Kelola Data Buku" as UC_Kelola
+    usecase "Ajukan Peminjaman" as UC_Ajukan
+    usecase "Cari Buku" as UC_Cari
+    usecase "Validasi Ketersediaan\ndan Tunggakan" as UC_Validasi
+
+    ' Relasi Include (Tetap pakai panah putus-putus)
+    UC_Kembali ..> UC_Validasi : <<include>>
+    UC_Perpanjang ..> UC_Validasi : <<include>>
+    UC_Ajukan ..> UC_Validasi : <<include>>
+}
+
+' Hubungan Aktor (Garis lurus biasa tanpa panah)
+Pustakawan -- UC_Kembali
+Pustakawan -- UC_Perpanjang
+Pustakawan -- UC_Daftar
+Pustakawan -- UC_Kelola
+
+Anggota -- UC_Ajukan
+Anggota -- UC_Cari
+
+@enduml

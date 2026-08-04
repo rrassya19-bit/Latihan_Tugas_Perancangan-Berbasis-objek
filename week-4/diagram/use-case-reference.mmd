@@ -1,0 +1,43 @@
+graph LR
+    %% Pengaturan Gaya Tema Gelap Premium %%
+    classDef actorStyle fill:#2d1b4e,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef ucaseStyle fill:#1a1128,stroke:#fff,stroke-width:2px,color:#fff,rx:15px,ry:15px;
+
+    %% Definisi Aktor %%
+    Pustakawan["👤 Pustakawan"]:::actorStyle
+    Anggota["👤 Anggota"]:::actorStyle
+
+    %% Batasan Sistem (System Boundary) %%
+    subgraph SIPUSTAKA ["SIPUSTAKA"]
+        direction TB
+        
+        %% Baris Atas Use Case Utama %%
+        AP["Ajukan Peminjaman"]:::ucaseStyle
+        KB["Kembalikan Buku"]:::ucaseStyle
+        PP["Perpanjang Peminjaman"]:::ucaseStyle
+        
+        %% Baris Bawah Use Case Pendukung & Validasi %%
+        DA["Daftar Anggota"]:::ucaseStyle
+        VK["Validasi Ketersediaan dan<br>Tunggakan"]:::ucaseStyle
+        KDB["Kelola Data Buku"]:::ucaseStyle
+        CB["Cari Buku"]:::ucaseStyle
+    end
+    style SIPUSTAKA fill:#181124,stroke:#fff,stroke-width:2px,color:#fff;
+
+    %% Solusi Garis Menggantung: Menyambungkan Aktor ke Use Case yang Tepat %%
+    Pustakawan --- DA
+    Pustakawan --- KDB
+    
+    Anggota --- CB
+    Anggota --- AP
+    Anggota --- KB
+    Anggota --- PP
+
+    %% Solusi Arah Panah & Simbol Standar <<include>> %%
+    AP -. "<<include>>" .-> VK
+    KB -. "<<include>>" .-> VK
+    PP -. "<<include>>" .-> VK
+
+    %% Pengaturan Desain Garis %%
+    linkStyle 0,1,2,3,4,5 stroke:#fff,stroke-width:2px;
+    linkStyle 6,7,8 stroke:#fff,stroke-width:1.5px,stroke-dasharray: 3 3;
