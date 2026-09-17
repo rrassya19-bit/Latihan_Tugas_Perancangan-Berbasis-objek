@@ -1,0 +1,32 @@
+graph LR
+    %% Styling berdasarkan arsitektur BCE (Boundary, Control, Entity)
+    classDef boundary fill:#E1F5FE,stroke:#0288D1,stroke-width:2px,color:#01579B;
+    classDef control fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px,color:#F57F17;
+    classDef entity fill:#E8F5E9,stroke:#388E3C,stroke-width:2px,color:#1B5E20;
+    classDef noteStyle fill:#FFFFFF,stroke:#B0BEC5,stroke-width:1px,stroke-dasharray: 5 5,color:#37474F;
+
+    %% Objek / Lifeline dengan Stereotype
+    A["«boundary»<br/><u>a : Anggota</u>"]:::boundary
+    S["«control»<br/><u>s : SistemPerpustakaan</u>"]:::control
+    K["«entity»<br/><u>k : Katalog</u>"]:::entity
+    N["«boundary»<br/><u>n : LayananNotifikasi</u>"]:::boundary
+    D["«entity»<br/><u>db : LogAudit</u>"]:::entity
+
+    %% Pesan Komunikasi & Sequence Numbering
+    A -- "1: ajukanPeminjaman(anggota, isbn)" --> S
+    
+    subgraph Pengecekan_Stok ["Proses Pengecekan Stok"]
+        S -- "1.1: prosesPermintaan(isbn)" --> K
+        K -.->|"1.2: stokBerkurang(isbn, sisaStok) [stok > 0]<br/>1.2b: stokHabis(isbn) [stok == 0]"| S
+    end
+
+    subgraph Event_Handling ["Penanganan Event / Broadcast"]
+        S -- "1.3: peminjamanSukses(isbn) / 1.3b: peminjamanGagal(isbn)" --> N
+        S -- "1.4: catatPeminjaman(isbn) / 1.4b: catatPeminjamanGagal(isbn)" --> D
+    end
+
+    N -.->|"1.5: konfirmasiBerhasil() / 1.5b: konfirmasiGagal()"| A
+
+    %% Catatan Penjelasan Diagram
+    NoteUML["<b>Keterangan Communication Diagram:</b><br/>1. Panah solid (-->) = Call Method / Direct Message<br/>2. Panah putus-putus (-.->) = Event Return / Broadcast Listener<br/>3. Nomor hirarkis (1, 1.1, 1.2) = Urutan eksekusi pesan"]:::noteStyle
+    S -.-> NoteUML
