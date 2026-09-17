@@ -1,0 +1,32 @@
+@startuml Communication Diagram - Sistem Peminjaman Perpustakaan
+title Communication Diagram — Sistem Peminjaman Perpustakaan (Minggu 9)
+
+skinparam style strictuml
+skinparam handwritten false
+skinparam ObjectBackgroundColor white
+skinparam ObjectBorderColor black
+skinparam ObjectFontName Arial
+skinparam ObjectFontSize 12
+
+' Element Definitions with BCE Stereotypes
+object "<u>a : Anggota</u>\n«boundary»" as a #E1F5FE
+object "<u>s : SistemPerpustakaan</u>\n«control»" as s #FFF9C4
+object "<u>k : Katalog</u>\n«entity»" as k #E8F5E9
+object "<u>n : LayananNotifikasi</u>\n«boundary»" as n #E1F5FE
+object "<u>db : LogAudit</u>\n«entity»" as db #E8F5E9
+
+' Message Links and Sequence Numbers
+a -- s : 1: ajukanPeminjaman(anggota, isbn) >
+s -- k : 1.1: prosesPermintaan(isbn) >\n< 1.2: stokBerkurang(isbn, sisaStok) [sukses]\n< 1.2b: stokHabis(isbn) [gagal]
+s -- n : 1.3: peminjamanSukses(isbn) >\n1.3b: peminjamanGagal(isbn) >
+s -- db : 1.4: catatPeminjaman(isbn) >\n1.4b: catatPeminjamanGagal(isbn) >
+n -- a : 1.5: konfirmasiBerhasil() >\n1.5b: konfirmasiGagal() >
+
+note bottom of s
+  <b>Aturan Communication Diagram:</b>
+  • Penomoran (1, 1.1, 1.2, dst.) menunjukkan urutan pemanggilan & nested call.
+  • Arah panah (>) menunjukkan arah pengiriman pesan antar-objek.
+  • Menggambarkan struktur organisasi objek & hubungan event-driven (EventEmitter).
+end note
+
+@enduml
